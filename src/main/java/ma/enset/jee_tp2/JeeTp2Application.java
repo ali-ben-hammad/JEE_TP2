@@ -5,6 +5,7 @@ import ma.enset.jee_tp2.Repository.MedecinRepository;
 import ma.enset.jee_tp2.Repository.PatientRepository;
 import ma.enset.jee_tp2.Repository.RendezVousRepository;
 import ma.enset.jee_tp2.entites.*;
+import ma.enset.jee_tp2.sevice.IHospitalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -24,10 +25,10 @@ public class JeeTp2Application{
 
 
     @Bean
-    CommandLineRunner start(PatientRepository patientRepository,
-                            MedecinRepository medecinRepository,
-                            RendezVousRepository rendezVousRepository,
-                            ConsultationRepository consultationRepository){
+    CommandLineRunner start(IHospitalService hospitalService,
+                            PatientRepository patientRepository,
+                            MedecinRepository medecinRepository
+    ){
         return args -> {
             Stream.of("Ali", "Omar", "Khalid", "Hassan").forEach(nom -> {
                 Patient patient = new Patient();
@@ -35,17 +36,17 @@ public class JeeTp2Application{
                 patient.setDateNaissance(new Date());
                 patient.setScore(100 + (int) (Math.random() * 1000));
                 patient.setMalade(Math.random() > 0.5);
-                patientRepository.save(patient);
+                hospitalService.savePatient(patient);
             });
             Stream.of("Berhili", "Benali", "barry", "belehbib").forEach(nom -> {
                 Medecin medecin = new Medecin();
                 medecin.setNom(nom);
                 medecin.setEmail(nom + "@gmail.com");
                 medecin.setSpecialite(Math.random()>0.5?"Cardiologue":"Dentiste");
-                medecinRepository.save(medecin);
+                hospitalService.saveMedecin(medecin);
             });
 
-            Patient patient = patientRepository.findById(1L).orElse(null);
+            Patient patient = hospitalService.findPatientById(1L);
             Patient patient1 = patientRepository.findByNom("Ali");
 
             Medecin medecin = medecinRepository.findByNom("Berhili");
@@ -54,13 +55,13 @@ public class JeeTp2Application{
             rendezVous.setPatient(patient);
             rendezVous.setMedecin(medecin);
             rendezVous.setStatus(StatusRDV.PENDING);
-            rendezVousRepository.save(rendezVous);
+            hospitalService.saveRendezVous(rendezVous);
 
             Consultation consultation = new Consultation();
             consultation.setDateConsultation(new Date());
             consultation.setRendezVous(rendezVous);
             consultation.setRapport("Raapport de consultation");
-            consultationRepository.save(consultation);
+            hospitalService.saveConsultation(consultation);
 
         };
     }
