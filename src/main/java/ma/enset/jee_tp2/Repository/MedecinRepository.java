@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface MedecinRepository extends JpaRepository<Medecin, Long> {
         List<Medecin> findByNomContains(String nom);
-        Medecin findByNom(String nom);
+
 
 }

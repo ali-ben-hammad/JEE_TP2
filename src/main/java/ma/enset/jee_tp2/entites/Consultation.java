@@ -1,5 +1,6 @@
 package ma.enset.jee_tp2.entites;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,5 +19,6 @@ public class Consultation {
     private String rapport;
 
     @OneToOne
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
      private  RendezVous rendezVous;
 }

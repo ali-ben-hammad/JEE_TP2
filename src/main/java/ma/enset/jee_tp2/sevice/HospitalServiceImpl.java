@@ -18,14 +18,12 @@ public class HospitalServiceImpl implements IHospitalService {
     private PatientRepository patientRepository;
     private RendezVousRepository rendezVousRepository;
     private ConsultationRepository consultationRepository;
-
     public HospitalServiceImpl(MedecinRepository medecinRepository, PatientRepository patientRepository, RendezVousRepository rendezVousRepository, ConsultationRepository consultationRepository) {
         this.medecinRepository = medecinRepository;
         this.patientRepository = patientRepository;
         this.rendezVousRepository = rendezVousRepository;
         this.consultationRepository = consultationRepository;
     }
-
     @Override
     public Patient savePatient(Patient p) {
         return patientRepository.save(p);
@@ -38,17 +36,14 @@ public class HospitalServiceImpl implements IHospitalService {
     public Medecin findMedecinById(Long id) {
         return medecinRepository.findById(id).get();
     }
-
     @Override
     public Medecin saveMedecin(Medecin m) {
         return medecinRepository.save(m);
     }
-
     @Override
     public RendezVous saveRendezVous(RendezVous r) {
         return rendezVousRepository.save(r);
     }
-
     @Override
     public Consultation saveConsultation(Consultation c) {
         return consultationRepository.save(c);

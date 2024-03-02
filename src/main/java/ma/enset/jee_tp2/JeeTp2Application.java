@@ -47,9 +47,9 @@ public class JeeTp2Application{
             });
 
             Patient patient = hospitalService.findPatientById(1L);
-            Patient patient1 = patientRepository.findByNom("Ali");
+            Patient patient1 = patientRepository.findByNomContains("Ali").get(0);
 
-            Medecin medecin = medecinRepository.findByNom("Berhili");
+            Medecin medecin = medecinRepository.findByNomContains("Berhili").get(0);
             RendezVous rendezVous = new RendezVous();
             rendezVous.setDate(new Date());
             rendezVous.setPatient(patient);

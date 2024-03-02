@@ -1,5 +1,6 @@
 package ma.enset.jee_tp2.entites;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +20,7 @@ public class RendezVous {
     @ManyToOne
     private Medecin medecin;
     @ManyToOne
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Patient patient;
     @Enumerated(EnumType.STRING)
     private StatusRDV status;

@@ -11,9 +11,5 @@ public interface IHospitalService {
     RendezVous saveRendezVous(RendezVous r);
     Consultation saveConsultation(Consultation c);
     Patient findPatientById(Long id);
-
     Medecin findMedecinById(Long id);
-
-
-
 }
