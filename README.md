@@ -72,3 +72,108 @@ public interface PatientRepository extends JpaRepository<Patient, Long>{
         });
 ```
 ![alt text](https://drive.google.com/file/d/1Avl2DwTWmIca5VN96gEK-htXNCZKbXDV/view?usp=drive_link)
+
+## Entity Consultation
+```java
+@Entity
+@Data @AllArgsConstructor
+@NoArgsConstructor
+public class Consultation {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private Date dateConsultation;
+    private String rapport;
+
+    @OneToOne
+     private  RendezVous rendezVous;
+}
+```
+## Entity Medecin
+```java
+@Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class Medecin {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String nom;
+    private String email;
+    private String specialite;
+    @OneToMany(mappedBy = "medecin", fetch = FetchType.LAZY)
+    private Collection<RendezVous> rendezVous;
+}
+```
+## Entity RendezVous
+```java
+@Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class RendezVous {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private Date date;
+    private boolean annule;
+    @ManyToOne
+    private Medecin medecin;
+    @ManyToOne
+    private Patient patient;
+    private StatusRDV status;
+    @OneToOne(mappedBy = "rendezVous")
+    private Consultation consultation;
+}
+```
+## Couche Service
+### IHospitalService
+```java
+public interface IHospitalService {
+    Patient savePatient(Patient p);
+    Medecin saveMedecin(Medecin m);
+    RendezVous saveRendezVous(RendezVous r);
+    Consultation saveConsultation(Consultation c);
+    Patient findPatientById(Long id);
+    Medecin findMedecinById(Long id);
+}
+```
+### HospitalServiceImpl
+```java
+@Service
+@Transactional
+public class HospitalServiceImpl implements IHospitalService {
+    private MedecinRepository medecinRepository;
+    private PatientRepository patientRepository;
+    private RendezVousRepository rendezVousRepository;
+    private ConsultationRepository consultationRepository;
+    public HospitalServiceImpl(MedecinRepository medecinRepository, PatientRepository patientRepository, RendezVousRepository rendezVousRepository, ConsultationRepository consultationRepository) {
+        this.medecinRepository = medecinRepository;
+        this.patientRepository = patientRepository;
+        this.rendezVousRepository = rendezVousRepository;
+        this.consultationRepository = consultationRepository;
+    }
+    @Override
+    public Patient savePatient(Patient p) {
+        return patientRepository.save(p);
+    }
+    @Override
+    public Patient findPatientById(Long id) {
+        return patientRepository.findById(id).get();
+    }
+    @Override
+    public Medecin findMedecinById(Long id) {
+        return medecinRepository.findById(id).get();
+    }
+    @Override
+    public Medecin saveMedecin(Medecin m) {
+        return medecinRepository.save(m);
+    }
+    @Override
+    public RendezVous saveRendezVous(RendezVous r) {
+        return rendezVousRepository.save(r);
+    }
+    @Override
+    public Consultation saveConsultation(Consultation c) {
+        return consultationRepository.save(c);
+    }
+}
+```
