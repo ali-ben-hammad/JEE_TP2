@@ -7,6 +7,6 @@ import java.nio.ByteBuffer;
 import java.util.List;
 
 public interface PatientRepository extends JpaRepository<Patient, Long>{
-
         List<Patient> findByNomContains(String nom);
+        Patient findByNom(String nom);
 }

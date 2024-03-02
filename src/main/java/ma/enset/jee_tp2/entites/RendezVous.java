@@ -20,8 +20,8 @@ public class RendezVous {
     private Medecin medecin;
     @ManyToOne
     private Patient patient;
+    @Enumerated(EnumType.STRING)
     private StatusRDV status;
     @OneToOne(mappedBy = "rendezVous")
     private Consultation consultation;
-
 }
