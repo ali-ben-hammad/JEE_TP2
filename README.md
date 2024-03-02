@@ -85,6 +85,7 @@ public class Consultation {
     private String rapport;
 
     @OneToOne
+     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
      private  RendezVous rendezVous;
 }
 ```
@@ -101,6 +102,7 @@ public class Medecin {
     private String email;
     private String specialite;
     @OneToMany(mappedBy = "medecin", fetch = FetchType.LAZY)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Collection<RendezVous> rendezVous;
 }
 ```
@@ -118,6 +120,7 @@ public class RendezVous {
     @ManyToOne
     private Medecin medecin;
     @ManyToOne
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Patient patient;
     private StatusRDV status;
     @OneToOne(mappedBy = "rendezVous")
@@ -176,4 +179,34 @@ public class HospitalServiceImpl implements IHospitalService {
         return consultationRepository.save(c);
     }
 }
+```
+## Test couche WEB
+### PatientRestController
+```java
+@RestController
+public class PatientRestController {
+    @Autowired
+    private PatientRepository patientRepository;
+
+    @GetMapping("patients")
+    public List<Patient> patientList(){
+        return patientRepository.findAll();
+    }
+}
+```
+## Migrer de H2 vers MySQL
+### applictaion.properties
+```properties
+server.port=8085
+# MySQL database configuration
+spring.datasource.url=jdbc:mysql://localhost:3306/hospitalJEE?CreateDatabaseIfNotExist=true
+# dialect for hibernate
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
+spring.datasource.username=root
+spring.datasource.password=1234
+spring.jpa.show-sql=true
+
+spring.jpa.hibernate.ddl-auto=create
+
+#spring.h2.console.enabled=true
 ```
